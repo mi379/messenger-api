@@ -22,8 +22,8 @@ httpServer.on('listening',() => {
   watchDbCollectionChange(app)
 })
 
-httpServer.on('error',() => {
-  console.log('eror')
+httpServer.on('error',(err) => {
+  console.log(err.message)
 })
 
 
