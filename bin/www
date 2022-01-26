@@ -5,8 +5,10 @@
  */
 
 var app = require('../app');
+var passport = require('passport')
 var debug = require('debug')('pager-apis:server');
 var http = require('http');
+var {Strategy} = require('passport-local')
 
 /**
  * Get port from environment and store in Express.
@@ -28,6 +30,8 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+passport.use(new Strategy(strategy));
 
 /**
  * Normalize a port into a number, string, or false.
@@ -87,4 +91,8 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+function strategy(username,password,done){
+  done(null,{username,password})
 }
