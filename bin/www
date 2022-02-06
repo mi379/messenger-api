@@ -3,18 +3,19 @@
 /**
  * Module dependencies.
  */
-
+var http = require('http');
 var app = require('../app');
 var passport = require('passport')
 var debug = require('debug')('pager-apis:server');
-var http = require('http');
+var {config} = require('../utils/request')(process.env)
 var {Strategy} = require('passport-local')
+
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '8000');
 app.set('port', port);
 
 /**
@@ -93,6 +94,14 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-function strategy(username,password,done){
-  done(null,{username,password})
+async function strategy(username,password,done){
+  try{
+    var result = await config('post','login/submit',{
+      username,password
+    })
+    done(null,result)
+  }
+  catch(err){
+    done(null,err)
+  }
 }

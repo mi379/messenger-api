@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "node -r dotenv/config ./bin/www"
+    "dev": "nodemon -r dotenv/config ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.25.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^14.3.2",
@@ -14,6 +15,7 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "neo4j-driver": "^4.4.1",
+    "nodemon": "^2.0.15",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "pug": "2.0.0-beta11"

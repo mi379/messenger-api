@@ -7,6 +7,11 @@ var passport = require('passport')
 
 
 var loginRouter = require('./routes/login');
+var bioRouter = require('./routes/bio');
+var highSchool = require('./routes/highschool');
+var university = require('./routes/university')
+var city = require('./routes/city');
+
 
 var app = express();
 
@@ -17,7 +22,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize())
 
-app.use('/login', loginRouter);
+app.use('/login',loginRouter);
+app.use('/bio',bioRouter);
+app.use('/highschool',highSchool);
+app.use('./university',university);
+app.use('/city',city);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
