@@ -12,11 +12,11 @@ router.get('/:id',async(req,res,next) => {
       dbObject.driver
   	)
   	var {records} = await session.run(
-      `match(bio)-[:bio]->(u:user{id:$id})
-      return bio`,req.params
+      `match(work)<-[:work]-(u:user{
+      id:$id}) return work`,req.params
   	)
 
-  	var fields = records.map(({_fields}) => {
+    var fields = records.map(({_fields}) => {
       return _fields.map(({properties}) => {
         return properties
       })
@@ -27,7 +27,6 @@ router.get('/:id',async(req,res,next) => {
     })
 
     res.status(200).send(properties) 
-
 	}
 	catch({message}){
 	  res.status(500).send(

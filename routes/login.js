@@ -40,7 +40,9 @@ router.post('/submit',async (req,res,next) => {
 
   }
   catch(err){
-  	res.send(err.message)
+  	res.status(500).send(
+      'error connection'
+    )
   }
 })
 

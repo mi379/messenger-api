@@ -11,6 +11,7 @@ var bioRouter = require('./routes/bio');
 var highSchool = require('./routes/highschool');
 var university = require('./routes/university')
 var city = require('./routes/city');
+var work = require('./routes/work');
 
 
 var app = express();
@@ -25,8 +26,10 @@ app.use(passport.initialize())
 app.use('/login',loginRouter);
 app.use('/bio',bioRouter);
 app.use('/highschool',highSchool);
-app.use('./university',university);
+app.use('/university',university);
 app.use('/city',city);
+app.use('/work',work);
+
 
 
 // catch 404 and forward to error handler

@@ -6,24 +6,27 @@ var express = require('express');
 var dbObject = Session(driver);
 var router = express.Router();
 
-router.get('/current/:id',async(req,res,next) => {
+router.get('/currentCity/:id',async(req,res,next) => {
 	try{
 	  var session = dbObject.create(
-        dbObject.driver
-  	  )
-  	  var {records} = await session.run(
-        `match(current)<-[:current]-(u:user{
-        id:$id}) return current`,req.params
-  	  )
+      dbObject.driver
+    )
+    var {records} = await session.run(
+      `match(currentCity)<-[:currentCity]-(u:user{
+      id:$id}) return currentCity`,req.params
+  	)
+    
+    var fields = records.map(({_fields}) => {
+      return _fields.map(({properties}) => {
+        return properties
+      })
+    })
 
-  	  var result = records.map(({_fields}) => {
-  	  	return _fields.map(({properties}) => {
-          return properties
-  	  	})
-  	  })
+    var properties = fields.map(([{id,...x}]) => {
+      return x
+    })
 
-      res.status(200).send(result)
-
+    res.status(200).send(properties)
 	}
 	catch({message}){
 	  res.status(500).send(
@@ -32,24 +35,23 @@ router.get('/current/:id',async(req,res,next) => {
 	}
 })
 
-router.get('/hometown/:id',async(req,res,next) => {
+router.get('/homeTown/:id',async(req,res,next) => {
   try{
     var session = dbObject.create(
-        dbObject.driver
-      )
-      var {records} = await session.run(
-        `match(hometown)<-[:hometown]-(u:user{
-        id:$id}) return current`,req.params
-      )
+      dbObject.driver
+    )
+    var {records} = await session.run(
+      `match(homeTown)<-[:homeTown]-(u:user{
+      id:$id}) return homeTown`,req.params
+    )
 
-      var result = records.map(({_fields}) => {
-        return _fields.map(({properties}) => {
-          return properties
-        })
+    var result = records.map(({_fields}) => {
+      return _fields.map(({properties}) => {
+        return properties
       })
+    })
 
-      res.status(200).send(result)
-
+    res.status(200).send(result)
   }
   catch({message}){
     res.status(500).send(
