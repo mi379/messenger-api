@@ -45,13 +45,17 @@ router.get('/homeTown/:id',async(req,res,next) => {
       id:$id}) return homeTown`,req.params
     )
 
-    var result = records.map(({_fields}) => {
+    var fields = records.map(({_fields}) => {
       return _fields.map(({properties}) => {
         return properties
       })
     })
 
-    res.status(200).send(result)
+    var properties = fields.map(([{id,...x}]) => {
+      return x
+    })
+
+    res.status(200).send(properties)
   }
   catch({message}){
     res.status(500).send(

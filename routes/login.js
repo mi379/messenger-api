@@ -9,7 +9,14 @@ var router = express.Router();
 
 router.post('/',(req,res,next) => {
   passport.authenticate('local',(err,user) => {
-    res.send({err,user})
+    if(err){
+      res.status(err.status).send(
+        err.message
+      )
+    }
+    else{
+      res.status(200).send(user)
+    }
   })(req,res,next)
 })
 
