@@ -3,16 +3,19 @@
 /**
  * Module dependencies.
  */
-
-var app = require('../app');
-var debug = require('debug')('pager-apis:server');
 var http = require('http');
+var app = require('../app');
+var passport = require('passport')
+var debug = require('debug')('pager-apis:server');
+var request = require('../utils/request');
+var local = require('passport-local')
+var test = request(process.env)
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '8000');
 app.set('port', port);
 
 /**
@@ -28,6 +31,8 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+passport.use(new local.Strategy(strategy));
 
 /**
  * Normalize a port into a number, string, or false.
@@ -87,4 +92,48 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+function strategy(username,password,done){
+  (async function({config}){
+     try{
+      var {id} = await config(
+        'post',
+        'login/submit',
+        {username,password}
+      )
+      var bio = highschool = await config(
+        'get',`bio/${id}`
+      )
+      var highschool = await config(
+        'get',`highschool/${id}`
+      )
+      var university = await config(
+        'get',`university/${id}`
+      )
+      var work = await config(
+        'get',`work/${id}`
+      )
+      var currentCity = await config(
+        'get',`city/currentCity/${id}`
+      )
+      var homeTown = await config(
+        'get',`city/homeTown/${id}`
+      )
+      done(null,{
+        bio,
+        highschool,
+        university,
+        work,
+        currentCity,
+        homeTown
+      })
+    }
+    catch({response}){
+      done({
+        status : response.status,
+        message : response.data
+      },null)
+    }
+  })(test)
 }
