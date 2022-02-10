@@ -8,6 +8,7 @@ var cors = require('cors')
 
 
 var loginRouter = require('./routes/login');
+var profileRouter = require('./routes/profile')
 var bioRouter = require('./routes/bio');
 var highSchool = require('./routes/highschool');
 var university = require('./routes/university')
@@ -26,6 +27,7 @@ app.use(cors({ origin : ['http://localhost:3000'] }));
 app.use(passport.initialize())
 
 app.use('/login',loginRouter);
+app.use('/profile',profileRouter);
 app.use('/bio',bioRouter);
 app.use('/highschool',highSchool);
 app.use('/university',university);
