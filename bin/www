@@ -125,6 +125,7 @@ function strategy(username,password,done){
         'get',`city/homeTown/${id}`
       )
       done(null,{
+        profile,
         bio,
         highschool,
         university,
