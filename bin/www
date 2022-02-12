@@ -124,7 +124,7 @@ function strategy(username,password,done){
       var homeTown = await config(
         'get',`city/homeTown/${id}`
       )
-      console.log({
+      done(null,{
         profile,
         bio,
         highschool,
@@ -135,10 +135,10 @@ function strategy(username,password,done){
       })
     }
     catch({response}){
-      console.log({
+      done({
         status : response.status,
         message : response.data
-      })
+      },null)
     }
   })(test)
 }
