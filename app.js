@@ -22,8 +22,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize())
-app.use(express.urlencoded({ extended: false }));
-app.use(cors({origin:['http://192.168.1.7:3000']}));
+app.use(express.urlencoded({extended:false}));
+app.use(cors({origin:['http://localhost:3000']}));
 app.use(express.static(path.join(__dirname,'public')));
 
 
