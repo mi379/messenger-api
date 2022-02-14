@@ -102,7 +102,6 @@ function strategy(username,password,done){
         'login/submit',
         {username,password}
       )
-
       var profile = await config(
         'get',`profile/${id}`
       )
@@ -125,6 +124,7 @@ function strategy(username,password,done){
         'get',`city/homeTown/${id}`
       )
       done(null,{
+        id,
         profile,
         bio,
         highschool,
