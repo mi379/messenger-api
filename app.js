@@ -24,7 +24,11 @@ app.use(cookieParser());
 app.use(passport.initialize())
 app.use(express.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname,'public')));
-app.use(cors({origin:['http://192.168.1.7:3000','http://localhost:3000']}));
+app.use(cors({origin:[
+  'https://sosial-media-app.herokuapp.com',
+  'http://192.168.1.7:3000',
+  'http://localhost:3000',
+]}));
 
 
 
