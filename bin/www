@@ -6,6 +6,7 @@
 var http = require('http');
 var app = require('../app');
 var passport = require('passport')
+var socket = require('socket.io');
 var debug = require('debug')('pager-apis:server');
 var request = require('../utils/request');
 var local = require('passport-local')
@@ -23,6 +24,17 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+var config = {cors:{origin:'*'}}
+
+var io = socket(server,config)
+
+io.on('connect',(socket) => {
+  console.log('connected............')
+  socket.on('disconnect',(reason) => {
+    console.log(reason)
+  })
+})
 
 /**
  * Listen on provided port, on all network interfaces.
