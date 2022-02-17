@@ -30,14 +30,16 @@ var config = {cors:{origin:'*'}}
 var io = socket(server,config)
 
 io.on('connect',(socket) => {
-  console.log('connected............');
+  console.log('connected...........');
   socket.on('disconnect',(reason) => {
-    console.log(
-      `disconnect,reason : ${reason}`
-    )
+    console.log('disconnected.....')
   })
-  socket.on('test',(id) => {
-    io.to(id).emit('test','test')
+  socket.on('create',({id}) => {
+    socket.join(id);
+    console.log(`a new member of room ${id} has added`)
+  })
+  socket.on('test',(roomId) => {
+    io.to(roomId).emit('test')
   })
 })
 
