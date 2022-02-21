@@ -79,8 +79,8 @@ function onError({syscall,code}) {
  */
 
 function onConnect(socket){
-  socket.on('newId',(roomId) => {
-    console.log(roomId)
+  socket.on('newId',({id}) => {
+    socket.join(id)
   })
 }
 
@@ -99,33 +99,9 @@ function strategy(username,password,done){
       var profile = await config(
         'get',`profile/${id}`
       )
-      var bio = await config(
-        'get',`bio/${id}`
-      )
-      var highschool = await config(
-        'get',`highschool/${id}`
-      )
-      var university = await config(
-        'get',`university/${id}`
-      )
-      var work = await config(
-        'get',`work/${id}`
-      )
-      var currentCity = await config(
-        'get',`city/currentCity/${id}`
-      )
-      var homeTown = await config(
-        'get',`city/homeTown/${id}`
-      )
       done(null,{
         id,
         profile,
-        bio,
-        highschool,
-        university,
-        work,
-        currentCity,
-        homeTown
       })
     }
     catch({response}){
