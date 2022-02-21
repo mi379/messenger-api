@@ -40,8 +40,15 @@ var io = socket(server,{
 io.on('connect',onConnect)
 
 /**
+ * using passport local
+ */
+
+passport.use(new local.Strategy(strategy))
+
+/**
  * Event listener for HTTP server "error" event.
  */
+
 
 function onError({syscall,code}) {
   if (syscall !== 'listen') {
