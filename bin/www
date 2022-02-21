@@ -91,18 +91,18 @@ function onConnect(socket){
 function strategy(username,password,done){
   (async function({config}){
      try{
-      var {id} = await config(
-        'post',
-        'login/submit',
-        {username,password}
-      )
-      var profile = await config(
-        'get',`profile/${id}`
-      )
-      done(null,{
-        id,
-        profile,
-      })
+       var {id} = await config(
+         'post',
+         'login/submit',
+         {username,password}
+       )
+       var profile = await config(
+         'get',`profile/${id}`
+       )
+       done(null,{
+         id,
+         profile,
+       })
     }
     catch({response}){
       done({
