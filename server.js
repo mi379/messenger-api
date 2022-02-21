@@ -1,3 +1,4 @@
+var http = require('http');
 var path = require('path');
 var cors = require('cors');
 var logger = require('morgan');
@@ -21,16 +22,10 @@ var university = require('./routes/university')
 app.use(logger('dev'));
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({origin:'*'}))
 app.use(passport.initialize())
 app.use(express.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname,'public')));
-app.use(cors({origin:[
-  'https://sosial-media-app.herokuapp.com',
-  'http://192.168.1.7:3000',
-  'http://localhost:3000',
-]}));
-
-
 
 app.use('/',index)
 app.use('/bio',bio);
@@ -54,4 +49,5 @@ app.use(function(err, req, res, next) {
   )
 });
 
-module.exports = app;
+module.exports = http.createServer(app)
+

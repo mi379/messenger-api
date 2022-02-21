@@ -1,13 +1,13 @@
 var axios = require('axios');
 
-module.exports = ({URL}) => {
+module.exports = (url) => {
   return {
     config : (method,path,requestData) => {
       return new Promise(async(resolve,reject) => {
      	  try{
      	    var {data} = await axios({
      	  	  method : method,
-     	  	  url : `${URL}/${path}`,
+     	  	  url : `${url}/${path}`,
      	  	  data : requestData
      	    })
           resolve(data)
@@ -18,4 +18,4 @@ module.exports = ({URL}) => {
       })
     }
   }
-}
+}st

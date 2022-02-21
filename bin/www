@@ -3,82 +3,48 @@
 /**
  * Module dependencies.
  */
-var http = require('http');
-var app = require('../app');
-var passport = require('passport')
+
+var port   = process.env.PORT;
 var socket = require('socket.io');
-var debug = require('debug')('pager-apis:server');
+var server = require('../server');
+var passport = require('passport');
+var local = require('passport-local');
 var request = require('../utils/request');
-var local = require('passport-local')
-var test = request(process.env)
+var requestObj = request(process.env.URL);
+
 
 /**
- * Get port from environment and store in Express.
+ * Listen on provided port
  */
 
-var port = normalizePort(process.env.PORT || '5000');
-app.set('port', port);
+server.listen(port)
 
 /**
- * Create HTTP server.
+ * Listen to http error event
  */
 
-var server = http.createServer(app);
+server.on('error', onError);
 
-var config = {cors:{origin:'*'}}
+/**
+ * Create socket connection between client and server
+ */
 
-var io = socket(server,config)
-
-io.on('connect',(socket) => {
-  console.log('connected...........');
-  socket.on('disconnect',(reason) => {
-    console.log('disconnected.....')
-  })
-  socket.on('create',({id}) => {
-    socket.join(id);
-    console.log(`a new member of room ${id} has added`)
-  })
-  socket.on('test',(roomId) => {
-    io.to(roomId).emit('test')
-  })
+var io = socket(server,{
+  cors: { origin:'*' }
 })
 
 /**
- * Listen on provided port, on all network interfaces.
+ * Listen to all event from client when connected
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-passport.use(new local.Strategy(strategy));
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val) {
-  var port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
+io.on('connect',onConnect)
 
 /**
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
-  if (error.syscall !== 'listen') {
+function onError({syscall,code}) {
+  if (syscall !== 'listen') {
     throw error;
   }
 
@@ -87,7 +53,7 @@ function onError(error) {
     : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
-  switch (error.code) {
+  switch (code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
@@ -102,16 +68,18 @@ function onError(error) {
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * Event listener for socket.io
  */
 
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+function onConnect(socket){
+  socket.on('newId',({id}) => {
+    socket.join(id)
+  })
 }
+
+/**
+ * Login Strategy using passport-local
+ */
 
 function strategy(username,password,done){
   (async function({config}){
@@ -159,5 +127,5 @@ function strategy(username,password,done){
         message : response.data
       },null)
     }
-  })(test)
+  })(requestObj)
 }
