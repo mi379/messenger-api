@@ -79,11 +79,8 @@ function onError({syscall,code}) {
  */
 
 function onConnect(socket){
-  socket.on('newId',({id}) => {
-    socket.join(id)
-  })
-  socket.on('test',(id) => {
-    io.to(id).emit('test')
+  socket.on('newId',(roomId) => {
+    console.log(roomId)
   })
 }
 
