@@ -28,7 +28,7 @@ router.get('/:id',async (req,res,next) => {
   }
   catch(err){
   	res.status(500).send(
-      'error connection'
+      'error network'
     )
   }
 })
