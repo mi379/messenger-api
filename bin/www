@@ -84,6 +84,13 @@ function onError({syscall,code}) {
  */
 
 function onConnect(socket){
+  socket.on('newId',(id) => {
+    socket.join(id)
+    io.to(id).emit('newId',
+      'new id added'
+    )
+  })
+
   socket.on('unread',(filter) => {
     filter.map(async({sender,receiver}) => {
       try{
