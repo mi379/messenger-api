@@ -12,7 +12,7 @@ router.get('/last/:id',async (req,res) => {
       dbObject.driver
   	)
   	var {records} = await session.run(
-      `match(senderProfile)-[:profile]->(sender)-[:sendMessage] -(message)-[:message{last:true}]->
+      `match(senderProfile)-[:profile]->(sender)-[:sendMessage] -(message:message{last:true})-[:message]->
       (receiver)<-[:profile]-(receiverProfile) where sender.id=$id or receiver.id=$id return sender,
       senderProfile,receiver,receiverProfile,message`,req.params
   	)
