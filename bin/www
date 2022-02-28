@@ -85,7 +85,7 @@ function onError({syscall,code}) {
 
 function onConnect(socket){
   socket.on('newId',(id) => {
-    socket.join(id)
+    socket.join(id);
     io.to(id).emit('newId',
       'new id added'
     )
@@ -113,6 +113,22 @@ function onConnect(socket){
         console.log({message})
       }
     })
+  })
+
+  socket.on('unreadUpdate',async({sender,receiver}) => {
+    try{
+      var session = dbObject.create(
+        dbObject.driver
+      )
+      await session.run(
+        `match(sender:user{id:'${sender}'})-[:sendMessage]->(message:message{unread:true})-[:message]->
+        (receiver:user{id:'${receiver}'}) SET message.unread=false return sender,receiver,message`
+      )
+      io.to(sender).emit('unreadUpdate',receiver)
+    }
+    catch({message}){
+      console.log(message)
+    }
   })
 }
 
