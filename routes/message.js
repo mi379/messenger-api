@@ -6,6 +6,39 @@ var express = require('express');
 var dbObject = Session(driver);
 var router = express.Router();
 
+
+router.get('/all/:sender/:receiver',async(req,res) => {
+  try{
+    var session = dbObject.create(
+      dbObject.driver
+    )
+    var {records} = await session.run(
+      `match(sender)-[:sendMessage]-(message)
+      -[:message]-(receiver) where sender.id=
+      $sender and receiver.id=$receiver or
+      sender.id=$receiver and receiver.id=$sender
+      return sender,message`,req.params
+    )
+    var _fields = records.map(({_fields}) => _fields)
+    var properties = _fields.map(([sender,message]) => {
+      return {
+        sender: sender.properties,
+        message : message.properties
+      }
+    })
+
+    var newProps = [...[...properties].sort((a,b) => {
+      return parseInt(a.message.timestamp) 
+      < parseInt(b.message.timestamp) ? -1 : 1
+    })]
+    res.status(200).send(newProps)
+  }
+  catch(err){
+    res.status(500).send('error networks')
+  }
+})
+
+
 router.get('/last/:id',async (req,res) => {
   try{
   	var session = dbObject.create(
@@ -37,5 +70,7 @@ router.get('/last/:id',async (req,res) => {
   	)
   }
 })
+
+
 
 module.exports = router
