@@ -2,6 +2,10 @@ import objectId from '../utils/objectId.js'
 import messageRouter from '../utils/router.js'
 import Message from '../mongoose/models/Message.js'
 
+messageRouter.post('/new',async(req,res) => {
+  res.send('ini adalah fitur terbaru')
+})
+
 messageRouter.get('/all',async(req,res) => {
   try{
     var ids = Object.keys(req.query).map(
