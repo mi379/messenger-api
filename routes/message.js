@@ -8,7 +8,7 @@ messageRouter.post('/new',async(req,res) => {
     var result = await New.save()
 
     res.status(200).send(
-      result
+      'already send'
     )
   }
   catch(err){
