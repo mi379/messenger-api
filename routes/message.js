@@ -3,7 +3,6 @@ import messageRouter from '../utils/router.js'
 import Message from '../mongoose/models/Message.js'
 
 
-
 messageRouter.get('/all',async(req,res) => {
   try{
     var ids = Object.keys(req.query).map(
