@@ -8,7 +8,7 @@ var sender = {
   type: mongoose.ObjectId
 }
 
-var receiver = {
+var accept = {
   type: mongoose.ObjectId
 }
 
@@ -25,6 +25,6 @@ var read = {
 }
 
 export default new mongoose.Schema({
-  _id,sender,receiver,
+  _id,sender,accept,
   content,uniqueId,read
 })

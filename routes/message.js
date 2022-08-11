@@ -4,14 +4,11 @@ import Message from '../mongoose/models/Message.js'
 
 messageRouter.post('/new',async(req,res) => {
   try{
-    await Message.save(
-      new Message(
-        req.body
-      )
-    )
+    var New = new Message(req.body)
+    var result = await New.save()
 
     res.status(200).send(
-      req.body
+      result
     )
   }
   catch(err){
