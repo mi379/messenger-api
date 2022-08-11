@@ -2,22 +2,18 @@
   "name": "sosial-media-api",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon -r dotenv/config ./bin/www"
   },
   "dependencies": {
     "axios": "^0.25.0",
-    "bson": "^4.6.2",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^14.3.2",
     "express": "~4.16.1",
-    "googleapis": "^99.0.0",
     "http-errors": "~1.6.3",
-    "mongoose": "^6.2.9",
     "morgan": "~1.9.1",
     "neo4j-driver": "^4.4.1",
     "nodemon": "^2.0.15",

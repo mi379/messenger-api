@@ -1,0 +1,163 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var port   = process.env.PORT;
+var socket = require('socket.io');
+var server = require('../server');
+var passport = require('passport');
+var local = require('passport-local');
+var request = require('../utils/request');
+var requestObj = request(process.env.URL);
+var Session = require('../utils/session');
+var Driver = require('../utils/driver');
+var driver = Driver(process.env);
+var dbObject = Session(driver);
+
+
+
+/**
+ * Listen on provided port
+ */
+
+server.listen(port)
+
+/**
+ * Listen to http error event
+ */
+
+server.on('error', onError);
+
+/**
+ * Create socket connection between client and server
+ */
+
+var io = socket(server,{
+  cors: { origin:'*' }
+})
+
+/**
+ * Listen to all event from client when connected
+ */
+
+io.on('connect',onConnect)
+
+/**
+ * using passport local
+ */
+
+passport.use(new local.Strategy(strategy))
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+
+function onError({syscall,code}) {
+  if (syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for socket.io
+ */
+
+function onConnect(socket){
+  socket.on('newId',(id) => {
+    socket.join(id);
+    io.to(id).emit('newId',
+      'new id added'
+    )
+  })
+
+  socket.on('unread',(filter) => {
+    filter.map(async({sender,receiver}) => {
+      try{
+        var session = dbObject.create(
+          dbObject.driver
+        )
+        var {records} = await session.run(
+          `match(sender{id:'${sender.id}'})-[:sendMessage]
+          ->(message:message{unread:true})-[:message]->
+          (receiver{id:'${receiver.id}'}) return
+          count(message) as unread`
+        )
+        var [{_fields}] = records.map((record) => record)
+
+        var [{low}] = _fields.map((_field) => _field)
+
+        socket.emit('unread',[sender,low])
+      }
+      catch({message}){
+        console.log({message})
+      }
+    })
+  })
+
+  socket.on('unreadUpdate',async ({sender,receiver}) => {
+    try{
+      var session = dbObject.create(dbObject.driver)
+      var {records} = await session.run(
+        `match(sender:user{id:'${sender}'})-
+        [:sendMessage]-(message{unread:true})
+        -[:message]->(receiver:user{id:'${receiver}'})
+        set message.unread=false`
+      )
+      io.to(sender).emit('unreadUpdate',receiver)
+      socket.emit('updateIsDone')
+    }
+    catch({message}){
+      console.log(message)
+    }
+  })
+}
+
+/**
+ * Login Strategy using passport-local
+ */
+
+function strategy(username,password,done){
+  (async function({config}){
+    try{
+      var {id} = await config(
+        'post',
+        'login/submit',
+        {username,password}
+      )
+      var profile = await config(
+        'get',`profile/${id}`
+      )
+      done(null,{
+        id,
+        profile,
+      })
+    }
+    catch({response}){
+      done({
+        status : response.status,
+        message : response.data
+      },null)
+    }
+  })(requestObj)
+}
