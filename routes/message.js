@@ -7,6 +7,7 @@ var dbObject = Session(driver);
 var router = express.Router();
 
 
+
 messageRouter.get('/all',async(req,res) => {
   try{
     var session = dbObject.create(
