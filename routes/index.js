@@ -1,8 +1,7 @@
-var express = require('express');
-var router = express.Router();
+import indexRouter from '../utils/router.js'
 
-router.get('/',(req,res,next) => {
-  res.send('missing origin acccess')
+indexRouter.get('/',(req,res,next) => {
+  res.send('index page...')
 })
 
-module.exports = router
+export default indexRouter
