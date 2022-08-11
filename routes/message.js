@@ -3,7 +3,22 @@ import messageRouter from '../utils/router.js'
 import Message from '../mongoose/models/Message.js'
 
 messageRouter.post('/new',async(req,res) => {
-  res.send('ini adalah fitur terbaru')
+  try{
+    await Message.save(
+      new Message(
+        req.body
+      )
+    )
+
+    res.status(200).send(
+      req.body
+    )
+  }
+  catch(err){
+    res.status(500).send(
+      err.message
+    )
+  }
 })
 
 messageRouter.get('/all',async(req,res) => {
