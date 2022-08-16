@@ -9,6 +9,7 @@ import {app} from '../app.js'
 import {dbConnect} from '../utils/mongodb_connect.js'
 import {Server} from 'socket.io'
 import {watchDbCollectionChange} from '../utils/message-stream.js'
+import {handleSocket} from '../utils/handle-socket.js'
 
 var port = '8000' || process.env.port
 var origin = 'http://localhost:3000'
@@ -27,25 +28,16 @@ httpServer.on('error',() => {
 
 
 var cors = {origin :'*'}
+
 app.socket = new Server(
   httpServer,{
   	cors
   }
 )  
-.on(
-  'connect',
-  onConnected
-)
-
-function onConnected(socket){
-  console.log('connected')
-  socket.on('join',id => {
-    console.log(id)
-  	socket.join(id)
-  })
-}
-
-
-
+.on('connect',(cli) => {
+  return handleSocket(
+    app,cli
+  )
+})
+ 
 export default app
-

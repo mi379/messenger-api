@@ -19,26 +19,17 @@ messageRouter.post('/new',async(req,res) => {
   }
 })
 
+
+
 messageRouter.put('/new',async(req,res) => {
   try{
-    var ObjectId = objectId(req.body._id)
-    var match = [{$match:{_id:ObjectId}}]
-    var [docs] = await Message.aggregate(
-      match
+    await Message.findByIdAndUpdate(
+      req.body._id,req.body
     )
-    .addFields({
-      read: false
-    })
-
-    var New = new Message(
-      docs
+    
+    res.status(200).send(
+      'already update'
     )
-
-    var save = await New.save({
-      upsert: true
-    })
-
-    console.log(save)
   }
   catch(err){
     res.status(500).send(
