@@ -11,7 +11,6 @@ import signIn from './routes/signIn.js'
 import message from './routes/message.js'
 import testDbConnection from './utils/testConnection.js'
 
-
 app.use(logger('dev'))
 app.use(express.json())
 app.use(cookieParser())

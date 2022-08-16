@@ -2,6 +2,7 @@ import objectId from '../utils/objectId.js'
 import messageRouter from '../utils/router.js'
 import Message from '../mongoose/models/Message.js'
 
+
 messageRouter.post('/new',async(req,res) => {
   try{
     var New = new Message(req.body)
@@ -10,6 +11,34 @@ messageRouter.post('/new',async(req,res) => {
     res.status(200).send(
       'already send'
     )
+  }
+  catch(err){
+    res.status(500).send(
+      err.message
+    )
+  }
+})
+
+messageRouter.put('/new',async(req,res) => {
+  try{
+    var ObjectId = objectId(req.body._id)
+    var match = [{$match:{_id:ObjectId}}]
+    var [docs] = await Message.aggregate(
+      match
+    )
+    .addFields({
+      read: false
+    })
+
+    var New = new Message(
+      docs
+    )
+
+    var save = await New.save({
+      upsert: true
+    })
+
+    console.log(save)
   }
   catch(err){
     res.status(500).send(
@@ -113,7 +142,7 @@ messageRouter.get('/last',async(req,res) => {
       __res
     )
   }
-  catch(error){
+  catch(err){
     res.status(500).send(
       err.message
     )

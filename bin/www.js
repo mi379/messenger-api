@@ -7,42 +7,45 @@
 import {createServer} from 'http'
 import {app} from '../app.js'
 import {dbConnect} from '../utils/mongodb_connect.js'
-import {onHttpError} from '../utils/http-error.js'
 import {Server} from 'socket.io'
+import {watchDbCollectionChange} from '../utils/message-stream.js'
 
 var port = '8000' || process.env.port
 var origin = 'http://localhost:3000'
 var httpServer = createServer(app)
 
 httpServer.listen(port || '10000')
-httpServer.on('error',onHttpError)
-httpServer.on('listening',(x) => {
-  console.log(`port: ${port}`)
-  console.log('waiting db...')
+
+httpServer.on('listening',() => {
   dbConnect('localhost:27017')
+  watchDbCollectionChange(app)
 })
 
-var cors = {origin}
-var io = new Server(
+httpServer.on('error',() => {
+  console.log('eror')
+})
+
+
+var cors = {origin :'*'}
+app.socket = new Server(
   httpServer,{
   	cors
   }
-)
+)  
 .on(
   'connect',
   onConnected
 )
 
-function onConnected(client){
-  client.on('join',id => {
+function onConnected(socket){
+  console.log('connected')
+  socket.on('join',id => {
     console.log(id)
-    client.join(id)
+  	socket.join(id)
   })
 }
 
 
+
 export default app
 
-export {
-  port
-}
