@@ -1,16 +1,15 @@
 import mongoose from 'mongoose'
 
 
-async function dbConnect(host){
+async function dbConnect(uri){
   try{
-  	var db = `${host}/rtdb`
   	await mongoose.connect(
-      `mongodb://${db}`
+      uri
   	)
   }
   catch(err){
   	errConnDb(err)
-  	dbConnect(host)
+  	dbConnect(uri)
   }
 }
 
