@@ -1,6 +1,6 @@
 import Message from '../mongoose/models/Message.js'
 
-function parseMessageChange(socket,chg,id){
+function parseCollectionChange(socket,chg,id){
   if(chg.operationType == 'insert'){
     return socket.to(id).emit(
       'new',chg.fullDocument
@@ -14,14 +14,16 @@ function parseMessageChange(socket,chg,id){
     return socket.emit('mod',[
       _id,desc.updatedFields
     ])
-
   }
 }
 
 function watchDbCollectionChange({socket}){
   Message.watch().on('change',(chg) => {
     var x = chg.fullDocument?.uniqueId
-    parseMessageChange(socket,chg,x)
+    
+    return parseCollectionChange(
+      socket,chg,x
+    )
   })
 }
 

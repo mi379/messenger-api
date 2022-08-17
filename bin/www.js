@@ -6,15 +6,18 @@
 
 import {createServer} from 'http'
 import {app} from '../app.js'
+import {cors} from '../utils/cors.js'
 import {dbConnect} from '../utils/mongodb_connect.js'
 import {Server} from 'socket.io'
-import {watchDbCollectionChange} from '../utils/message-stream.js'
+import {watchDbCollectionChange} from '../utils/db-collection-stream.js'
 import {handleSocket} from '../utils/handle-socket.js'
 
 
 var port = '8000' || process.env.port
 var origin = 'http://localhost:3000'
+
 var httpServer = createServer(app)
+
 
 httpServer.listen(port || '10000')
 
@@ -25,10 +28,8 @@ httpServer.on('listening',() => {
 
 httpServer.on('error',(err) => {
   console.log(err.message)
+  return process.exit(1)
 })
-
-
-var cors = {origin :'*'}
 
 app.socket = new Server(
   httpServer,{
