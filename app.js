@@ -9,7 +9,8 @@ import app from './utils/express.js'
 import apiIndexPage from './routes/index.js'
 import signIn from './routes/signIn.js'
 import message from './routes/message.js'
-import testDbConnection from './utils/testConnection.js'
+import handleConnection from './utils/handle-connection.js'
+import testDbConnection from './utils/test-connection.js'
 
 app.use(logger('dev'))
 app.use(express.json())
@@ -25,9 +26,8 @@ app.use(
   })
 )
 
-app.use('/',apiIndexPage);
-
 app.use(testDbConnection);
+app.use('/',apiIndexPage);
 app.use('/signin',signIn);
 app.use('/message',message);
 
