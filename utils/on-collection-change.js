@@ -17,7 +17,7 @@ function parsingCollectionChange(id,socket,chg){
   }
 }
 
-function watchDbsCollectionChg({socket}){
+export default function ({socket}){
   Message.watch().on('change',(ch) => {
     return parsingCollectionChange(
       ch.fullDocument?.uniqueId,
@@ -33,6 +33,6 @@ function updateParser(param){
   ]
 }
 
-export {
-  watchDbsCollectionChg
-}
+// export {
+//   watchDbsCollectionChg
+// }

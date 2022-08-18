@@ -1,6 +1,6 @@
 import indexRouter from '../utils/router.js'
 
-indexRouter.get('/',(req,res,next) => {
+indexRouter.get('/',(req,res) => {
   res.send('index page...')
 })
 

@@ -1,4 +1,4 @@
-function handleSocket(app,client){
+export default function(app,client){
   client.on('join',(roomId) => {
   	console.log(roomId)
     client.join(roomId)
@@ -32,6 +32,6 @@ function parsing(param){
   ]
 }
 
-export {
-  handleSocket
-}
+// export {
+//   handleSocket
+// }

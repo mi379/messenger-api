@@ -20,6 +20,4 @@ function errConnDb(err){
 }
 
 
-export {
-  dbConnect
-}
+export default dbConnect
