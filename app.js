@@ -10,7 +10,7 @@ import apiIndexPage from './routes/index.js'
 import signIn from './routes/signIn.js'
 import message from './routes/message.js'
 import handleConnection from './utils/handle-connection.js'
-import testDbConnection from './utils/test-connection.js'
+import testDbConnection from './utils/mongodb-test-connection'
 
 app.use(logger('dev'))
 app.use(express.json())
