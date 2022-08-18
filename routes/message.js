@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import messageRouter from '../utils/router.js'
 import Message from '../mongoose/models/Message.js'
-import objectId from '../utils/objectId.js'
 import objId from '../middlewares/object-id.js'
 
 
