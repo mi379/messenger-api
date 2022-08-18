@@ -67,9 +67,7 @@ messageRouter.get('/last',objId,async(req,res) => {
     })
 
 
-    res.status(200).send(
-      newQueryResult
-    )
+    console.log(newQueryResult)
   }
   catch(err){
     res.status(500).send(
@@ -94,9 +92,7 @@ messageRouter.get('/all',objId,async(req,res) => {
       __v: 0
     })
 
-    res.status(200).send(
-      newResult
-    )
+    console.log(newResult)
   }
   catch(error){
     res.status(500).send(
