@@ -19,7 +19,7 @@ httpServer.listen(process.env.PORT)
 
 httpServer.on('listening',() => {
   console.log('ready to use')
-  dbConnect(process.env.URI)
+  dbConnect(process.env.ADR)
   watchDbsCollectionChg(app)
 })
 

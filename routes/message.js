@@ -3,7 +3,6 @@ import messageRouter from '../utils/router.js'
 import Message from '../mongoose/models/Message.js'
 import objId from '../middlewares/object-id.js'
 
-
 messageRouter.get('/last',objId,async(req,res) => {
   try{
     var sender = req.app.get("Id")(req.query._id)
@@ -101,6 +100,24 @@ messageRouter.get('/all',objId,async(req,res) => {
   catch(error){
     res.status(500).send(
       error.message
+    )
+  }
+})
+
+messageRouter.get('/byId',objId,async(req,res) => {
+  try{
+    var id = req.app.get("Id")(req.query.id)
+    var newResult = await Message.aggregate(
+      [{$match:{_id:id}}]
+    )
+
+    res.status(200).send(
+      newResult
+    )
+  }
+  catch(err){
+    res.status(500).send(
+      err.message
     )
   }
 })
