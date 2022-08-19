@@ -104,24 +104,6 @@ messageRouter.get('/all',objId,async(req,res) => {
   }
 })
 
-messageRouter.get('/byId',objId,async(req,res) => {
-  try{
-    var id = req.app.get("Id")(req.query._id)
-    var _newResult = await Message.aggregate(
-      [{$match:{_id:id}}]
-    )
-
-    res.status(200).send(
-      _newResult
-    )
-  }
-  catch(err){
-    res.status(500).send(
-      err.message
-    )
-  }
-})
-
 messageRouter.post('/new',async(req,res) => {
   try{
     var New = new Message(req.body)
