@@ -106,13 +106,13 @@ messageRouter.get('/all',objId,async(req,res) => {
 
 messageRouter.get('/byId',objId,async(req,res) => {
   try{
-    var id = req.app.get("Id")(req.query.id)
-    var newResult = await Message.aggregate(
+    var id = req.app.get("Id")(req.query._id)
+    var _newResult = await Message.aggregate(
       [{$match:{_id:id}}]
     )
 
     res.status(200).send(
-      newResult
+      _newResult
     )
   }
   catch(err){
