@@ -1,4 +1,5 @@
 export default function(app,client){
+  console.log('socket.io ready')
   client.on('join',(roomId) => {
   	console.log(roomId)
     client.join(roomId)
