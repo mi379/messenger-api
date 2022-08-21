@@ -15,10 +15,10 @@ userRouter.get('/search',async (req,res) => {
   	  path: '$profile'
   	})
   	.addFields({
-  	  index: '$profile.firstName'
+  	  matchValue: '$profile.firstName'
   	})
   	.match({
-  	  index: req.query.query
+  	  matchValue: req.query.query
   	})
   	.project({
   	  index: 0,
