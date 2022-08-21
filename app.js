@@ -6,6 +6,7 @@ import logger from 'morgan'
 import createError from 'http-errors'
 import cookieParser from 'cookie-parser'
 import index from './routes/index.js'
+import user from './routes/user.js'
 import signIn from './routes/signIn.js'
 import message from './routes/message.js'
 import origin from './utils/origin.js'
@@ -34,6 +35,10 @@ export default express().use(
 )
 .use(
   testConn
+)
+.use(
+  '/user',
+  user
 )
 .use(
   '/signin',
