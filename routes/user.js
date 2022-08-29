@@ -3,7 +3,8 @@ import User from '../mongoose/models/User.js'
 
 userRouter.get('/search',async (req,res) => {
   try{
-  	var [result] = await User.aggregate([{
+    var cc = new RegExp(req.query.query)
+  	var result = await User.aggregate([{
       $lookup : {
       	from: 'profiles',
       	localField: 'profile',
@@ -14,14 +15,10 @@ userRouter.get('/search',async (req,res) => {
   	.unwind({
   	  path: '$profile'
   	})
-  	.addFields({
-  	  matchValue: '$profile.firstName'
-  	})
   	.match({
-  	  matchValue: req.query.query
-  	})
+      'profile.firstName': cc
+    })
   	.project({
-  	  index: 0,
   	  username: 0,
   	  password: 0,
   	  profile : {

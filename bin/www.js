@@ -3,7 +3,6 @@
 /**
  * Module dependencies.
  */
-
 import http from 'http'
 import app from '../app.js'
 import origin from '../utils/origin.js'
