@@ -1,1 +1,1 @@
-api for react app
+api for a messenger-app
