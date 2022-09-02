@@ -44,6 +44,7 @@ jspm_packages/
 
 # static asset directories
 public/
+functions/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
