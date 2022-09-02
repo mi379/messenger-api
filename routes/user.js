@@ -25,6 +25,10 @@ userRouter.get('/search',async (req,res) => {
   	  	_id: 0
   	  }
   	})
+
+    res.status(200).send(
+      result
+    )
   }
   catch(err){
   	res.status(500).send(
