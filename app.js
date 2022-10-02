@@ -5,11 +5,11 @@ import createError from 'http-errors'
 import cookieParser from 'cookie-parser'
 import index from './routes/index.js'
 import user from './routes/user.js'
-import signIn from './routes/signIn.js'
 import message from './routes/message.js'
 import origin from './utils/origin.js'
 import testConn from './middlewares/mongodb-test-connection.js'
 import notFound from './middlewares/not-found-error.js'
+
 
 export default express().use(
   express.urlencoded({
@@ -29,7 +29,8 @@ export default express().use(
   logger('dev')
 )
 .use(
-  '/',index
+  '/',
+  index
 )
 .use(
   testConn
@@ -37,10 +38,6 @@ export default express().use(
 .use(
   '/user',
   user
-)
-.use(
-  '/signin',
-  signIn
 )
 .use(
   '/message',

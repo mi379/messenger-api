@@ -1,17 +1,23 @@
 import mongoose from 'mongoose'
 
-var username = {
-  type: String
-}
-
-var password = {
-  type: String
-}
-
-var profile = {
-  type: mongoose.ObjectId
-}
-
 export default new mongoose.Schema({
-  username,password,profile
+  username : {
+  	type: String,
+  	required: true
+  },
+  password : {
+  	type: String,
+  	required: true
+  },
+  profile: {
+  	type: Object,
+  	required:true
+  },
+  friends: {
+  	type: Array
+  },
+  queryKey: {
+  	type: Number,
+  	required: true
+  }
 })

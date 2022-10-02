@@ -1,3 +1,7 @@
+import schema from '../schemas/message.js'
 import mongoose from 'mongoose'
-import Message from '../schemas/Message.js'
-export default mongoose.model('Message',Message)
+
+export default mongoose.model(
+  'Message',schema
+)
+

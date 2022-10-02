@@ -1,0 +1,46 @@
+export default function(params){
+  return [
+    {$match:{
+      $or:params
+    }},
+    {$lookup:{
+      from:'users',
+      localField:'sender',
+      foreignField:'_id',
+      as:'sender'
+    }},
+    {$lookup:{
+      from:'users',
+      localField:'accept',
+      foreignField:'_id',
+      as:'accept'
+    }},
+    {$unwind:{
+      path:'$sender'
+    }},
+    {$unwind:{
+      path:'$accept'
+    }},
+    {$group:{
+      _id:'$groupId',
+      newRoot:{
+        $max:'$$ROOT'
+      }
+    }},
+    {$replaceRoot:{
+      newRoot:"$newRoot"
+    }},
+    {$project:{
+      sender:{
+        username:0,
+        password:0,
+        friends:0
+      },
+      accept:{
+        username:0,
+        password:0,
+        friends:0
+      }
+    }}
+  ]
+}

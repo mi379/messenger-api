@@ -1,7 +1,11 @@
-import indexRouter from '../utils/router.js'
+import express from 'express'
 
-indexRouter.get('/',function(req,res,next) {
-  res.status(200).send('...')
-})
+var router = express.Router()
 
-export default indexRouter
+export default router.get(
+  '/',(req,res) => {
+    res.send(
+      '...'
+    )
+  }
+)
